@@ -1,5 +1,5 @@
 import { useState } from "react"
-import ResultCard from "../components/ResultCardRedFlag"
+import ResultCard from "../components/ResultCard"
 import Disclaimer from "../components/Disclaimer"
 
 export default function RedFlag() {
@@ -17,15 +17,12 @@ export default function RedFlag() {
         body: JSON.stringify({ messages, mode })
       })
       const data = await res.json()
-      console.log("Backend returned:", data)
 
-      // Ensure safe defaults
       setResult({
         score: data?.score ?? 0,
-        vibeSummary: data?.vibe_summary ?? "",
-        redFlags: Array.isArray(data?.red_flags) ? data.red_flags : [],
-        translations: Array.isArray(data?.translations) ? data.translations : [],
-        nextMoves: data?.next_moves ?? null
+        flags: Array.isArray(data?.flags) ? data.flags : [],
+        analysis: Array.isArray(data?.analysis) ? data.analysis : [],
+        advice: data?.advice ?? "No advice available"
       })
     } catch (err) {
       console.error(err)
@@ -40,35 +37,51 @@ export default function RedFlag() {
   }
 
   return (
-    <div className="p-8 max-w-4xl mx-auto space-y-4">
-      <h2 className="text-2xl font-bold">🚩 Red Flag Detector</h2>
+    <section className="feature-page redflag-page">
+      <div className="feature-panel">
+        <h2>Red Flag Detector</h2>
+        <p className="feature-subtitle">drop chat logs and scan for warning patterns</p>
 
-      <textarea
-        placeholder="Paste chat logs here..."
-        className="w-full h-40 p-3 text-black"
-        onChange={e => setMessages(e.target.value)}
-      />
+        <textarea
+          placeholder="Paste chat logs here..."
+          className="feature-input"
+          value={messages}
+          onChange={e => setMessages(e.target.value)}
+        />
 
-      <button
-        onClick={analyze}
-        className="px-6 py-3 bg-red-600 rounded-xl"
-      >
-        {loading ? "Analyzing..." : "Detect Red Flags"}
-      </button>
-
-      {result && (
-        <div className="mt-6">
-          <ResultCard
-            title="🚩 Red Flag Analysis"
-            score={result.score}
-            vibeSummary={result.vibeSummary}
-            redFlags={result.redFlags}
-            translations={result.translations}
-            nextMoves={result.nextMoves}
-          />
-          <Disclaimer />
+        <div className="mode-row">
+          <span>Mode:</span>
+          {["honest", "delulu"].map((m) => (
+            <label key={m} className="mode-option">
+              <input
+                type="radio"
+                name="mode"
+                value={m}
+                checked={mode === m}
+                onChange={e => setMode(e.target.value)}
+              />
+              {m.charAt(0).toUpperCase() + m.slice(1)}
+            </label>
+          ))}
         </div>
-      )}
-    </div>
+
+        <button onClick={analyze} className="feature-button redflag-button">
+          {loading ? "Analyzing..." : "Detect Red Flags"}
+        </button>
+
+        {result && (
+          <div className="feature-result">
+            <ResultCard
+              title="Red Flag Analysis"
+              score={result.score}
+              flags={result.flags}
+              analysis={result.analysis}
+              advice={result.advice}
+            />
+            <Disclaimer />
+          </div>
+        )}
+      </div>
+    </section>
   )
 }
