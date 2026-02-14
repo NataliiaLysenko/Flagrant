@@ -249,6 +249,10 @@ body {
   margin: 0.45rem 0 0;
 }
 
+.chaos-meter-inline {
+  white-space: nowrap;
+}
+
 .feature-page {
   position: relative;
   overflow: hidden;
