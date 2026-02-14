@@ -40,7 +40,7 @@ export default function Match() {
 )
 
   const handleSubmit = async () => {
-    if (!user || !crush) return alert("Please fill both profiles")
+    if (!user.gender || !crush.gender) return alert("😫😖😣 Please fill both profiles 😫😖😣")
     setLoading(true)
     try {
       const res = await fetch("https://flagrant-production.up.railway.app/match", {
