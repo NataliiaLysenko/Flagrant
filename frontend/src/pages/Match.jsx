@@ -39,7 +39,7 @@ export default function Match() {
 )
 
   const handleSubmit = async () => {
-    if (!user.gender || !crush.gender) return alert("Fill both profiles 😤")
+    if (!user || !crush) return alert("Please fill both profiles")
     setLoading(true)
     try {
       const res = await fetch("http://localhost:8000/match", {
