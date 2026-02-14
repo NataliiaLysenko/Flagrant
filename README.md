@@ -73,6 +73,7 @@ Flagrant exists to:
 **Frontend**
 - React
 - Vite
+- Tailwind CSS
 
 **Backend**
 - Python
