@@ -1,6 +1,6 @@
 # Flagrant
 
-Silly compatibility checker + red-flag detector.
+Flagrant treats modern *courtship* as data and analyzes it accordingly.
 
 ## Tech Stack
 - Frontend: React + Vite
@@ -64,40 +64,3 @@ npm run dev
 
 Frontend default URL: `http://localhost:5173`
 
-## Common Issues
-
-### `node` / `npm` not recognized (Windows)
-Install Node LTS:
-```powershell
-winget install OpenJS.NodeJS.LTS
-```
-
-If still not found:
-```powershell
-$env:Path = "C:\Program Files\nodejs;$env:Path"
-node -v
-npm -v
-```
-
-### PowerShell blocks venv activation
-Use session-only bypass:
-```powershell
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-.\.venv\Scripts\Activate.ps1
-```
-
-### `npm ERR! enoent ... package.json`
-Run npm commands from `frontend/`, not `backend/`.
-
-## Day-to-Day Run
-Terminal 1:
-```bash
-cd backend
-uvicorn main:app --reload
-```
-
-Terminal 2:
-```bash
-cd frontend
-npm run dev
-```
