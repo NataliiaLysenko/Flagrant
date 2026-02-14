@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { Link } from "react-router-dom"
 import ResultCard from "../components/ResultCardRedFlag"
 import Disclaimer from "../components/Disclaimer"
 
@@ -49,6 +50,7 @@ export default function RedFlag() {
   return (
     <section className="feature-page redflag-page">
       <div className="feature-panel">
+        <Link to="/" className="feature-back-link">Back to Home</Link>
         <h2>🚩 Red Flag Detector</h2>
         <p className="feature-subtitle">Paste a conversation. We’ll read between the lines.</p>
 
@@ -62,17 +64,14 @@ export default function RedFlag() {
 
         {/* Tone / Mode */}
         <div className="mode-row">
-          <p className="font-semibold text-sm text-gray-200">Tone:</p>
-          <div className="flex gap-3">
+          <p className="mode-label">Tone:</p>
+          <div className="mode-toggle-group">
             {["honest", "delulu"].map(m => (
               <button
                 key={m}
+                type="button"
                 onClick={() => setMode(m)}
-                className={`feature-button ${
-                  mode === m
-                    ? "bg-red-600 shadow-lg text-white scale-[1.02]"
-                    : "bg-red-500/70 text-gray-200 hover:bg-red-600 hover:text-white"
-                }`}
+                className={`mode-toggle ${mode === m ? "is-active" : ""}`}
               >
                 {m === "honest" ? "Brutally Honest" : "Delulu Mode"}
               </button>
