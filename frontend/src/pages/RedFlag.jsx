@@ -9,6 +9,7 @@ export default function RedFlag() {
   const [loading, setLoading] = useState(false)
 
   const analyze = async () => {
+    if (!messages) return alert("Paste some messages first 😤")
     setLoading(true)
     try {
       const res = await fetch("http://localhost:8000/redflag/text", {
@@ -17,58 +18,94 @@ export default function RedFlag() {
         body: JSON.stringify({ messages, mode })
       })
       const data = await res.json()
-      console.log("Backend returned:", data)
+      console.log("Redflag API response:", data)  // 🔍 check backend response
 
-      // Ensure safe defaults
       setResult({
-        score: data?.score ?? 0,
+        score: typeof data?.score === "number" ? data.score : 0,
         vibeSummary: data?.vibe_summary ?? "",
-        redFlags: Array.isArray(data?.red_flags) ? data.red_flags : [],
-        translations: Array.isArray(data?.translations) ? data.translations : [],
-        nextMoves: data?.next_moves ?? null
+        redFlags: Array.isArray(data?.red_flags)
+          ? data.red_flags
+          : [],
+        translations: Array.isArray(data?.translations)
+          ? data.translations
+          : [],
+        nextMoves: data?.next_moves && typeof data.next_moves === "object"
+          ? data.next_moves
+          : { pivot: "", slow_down: "", eject: "" }  // safe default
       })
     } catch (err) {
-      console.error(err)
+      console.error("Error analyzing messages:", err)
       setResult({
         score: 0,
-        flags: [],
-        analysis: [],
-        advice: "Error analyzing the messages"
+        redFlags: [],
+        translations: [],
+        vibeSummary: "",
+        nextMoves: { pivot: "Error", slow_down: "Error", eject: "Error" }
       })
     }
     setLoading(false)
   }
 
   return (
-    <div className="p-8 max-w-4xl mx-auto space-y-4">
-      <h2 className="text-2xl font-bold">🚩 Red Flag Detector</h2>
+    <section className="feature-page redflag-page">
+      <div className="feature-panel">
+        <h2>🚩 Red Flag Detector</h2>
+        <p className="feature-subtitle">Paste a conversation. We’ll read between the lines.</p>
 
-      <textarea
-        placeholder="Paste chat logs here..."
-        className="w-full h-40 p-3 text-black"
-        onChange={e => setMessages(e.target.value)}
-      />
+        {/* Chat Log */}
+        <textarea
+          placeholder="Paste chat logs here..."
+          className="feature-input min-h-[350px] text-lg"
+          value={messages}
+          onChange={e => setMessages(e.target.value)}
+        />
 
-      <button
-        onClick={analyze}
-        className="px-6 py-3 bg-red-600 rounded-xl"
-      >
-        {loading ? "Analyzing..." : "Detect Red Flags"}
-      </button>
-
-      {result && (
-        <div className="mt-6">
-          <ResultCard
-            title="🚩 Red Flag Analysis"
-            score={result.score}
-            vibeSummary={result.vibeSummary}
-            redFlags={result.redFlags}
-            translations={result.translations}
-            nextMoves={result.nextMoves}
-          />
-          <Disclaimer />
+        {/* Tone / Mode */}
+        <div className="mode-row">
+          <p className="font-semibold text-sm text-gray-200">Tone:</p>
+          <div className="flex gap-3">
+            {["honest", "delulu"].map(m => (
+              <button
+                key={m}
+                onClick={() => setMode(m)}
+                className={`feature-button ${
+                  mode === m
+                    ? "bg-red-600 shadow-lg text-white scale-[1.02]"
+                    : "bg-red-500/70 text-gray-200 hover:bg-red-600 hover:text-white"
+                }`}
+              >
+                {m === "honest" ? "Brutally Honest" : "Delulu Mode"}
+              </button>
+            ))}
+          </div>
         </div>
-      )}
-    </div>
+
+        {/* Analyze Button */}
+        <div className="flex justify-center mt-4">
+          <button
+            onClick={analyze}
+            disabled={loading || !messages}
+            className="feature-button redflag-button px-12 py-4"
+          >
+            {loading ? "Analyzing..." : "Detect Red Flags 🚩"}
+          </button>
+        </div>
+
+        {/* Results */}
+        {result && (
+          <div className="feature-result">
+            <ResultCard
+              title="🚨 Analysis Result"
+              score={result.score}
+              vibeSummary={result.vibeSummary}
+              redFlags={result.redFlags}
+              translations={result.translations}
+              nextMoves={result.nextMoves}
+            />
+            <Disclaimer />
+          </div>
+        )}
+      </div>
+    </section>
   )
 }
