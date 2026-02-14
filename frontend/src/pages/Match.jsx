@@ -51,7 +51,6 @@ export default function Match() {
         })
       })
       const data = await res.json()
-      console.log("Match backend returned:", data)
 
       setResult({
         compatibility: data?.compatibility ?? 0,
@@ -59,7 +58,7 @@ export default function Match() {
         lifestyle_fit: data?.lifestyle_fit ?? "N/A",
         chaos_risk: data?.chaos_risk ?? "N/A",
         commentary: data?.commentary ?? "",
-        verdict: data?.verdict ?? "⚠️"
+        verdict: data?.verdict ?? "warning"
       })
     } catch (err) {
       console.error(err)
@@ -69,15 +68,17 @@ export default function Match() {
         lifestyle_fit: "N/A",
         chaos_risk: "N/A",
         commentary: "Error analyzing match",
-        verdict: "⚠️"
+        verdict: "warning"
       })
     }
     setLoading(false)
   }
 
   return (
-    <div className="p-8 max-w-4xl mx-auto space-y-6">
-      <h2 className="text-3xl font-bold text-pink-600">💘 Compatibility Check</h2>
+    <section className="feature-page match-page">
+      <div className="feature-panel">
+        <h2>Compatibility Check</h2>
+        <p className="feature-subtitle">compare vibes, values, and emotional bandwidth</p>
 
       <div className="grid md:grid-cols-2 gap-6">
 
@@ -109,30 +110,28 @@ export default function Match() {
 
       </div>
 
-      <button
-        onClick={handleSubmit}
-        className="px-6 py-3 bg-pink-600 hover:bg-pink-700 rounded-xl font-semibold transition-colors"
-      >
-        {loading ? "Analyzing..." : "Analyze Match"}
-      </button>
+        <button onClick={handleSubmit} className="feature-button match-button">
+          {loading ? "Analyzing..." : "Analyze Match"}
+        </button>
 
-      {result && (
-        <div className="mt-6">
-          <ResultCard
-            title="💘 Match Result"
-            score={result.compatibility}
-            flags={[]} // not used for match
-            analysis={[
-              { flag: "Emotional Fit", detail: result.emotional_fit },
-              { flag: "Lifestyle Fit", detail: result.lifestyle_fit },
-              { flag: "Chaos Risk", detail: result.chaos_risk },
-              { flag: "Funny Commentary", detail: result.commentary },
-            ]}
-            advice={result.verdict}
-          />
-          <Disclaimer />
-        </div>
-      )}
-    </div>
+        {result && (
+          <div className="feature-result">
+            <ResultCard
+              title="Match Result"
+              score={result.compatibility}
+              flags={[]}
+              analysis={[
+                { flag: "Emotional Fit", detail: result.emotional_fit },
+                { flag: "Lifestyle Fit", detail: result.lifestyle_fit },
+                { flag: "Chaos Risk", detail: result.chaos_risk },
+                { flag: "Funny Commentary", detail: result.commentary },
+              ]}
+              advice={result.verdict}
+            />
+            <Disclaimer />
+          </div>
+        )}
+      </div>
+    </section>
   )
 }
