@@ -9,8 +9,6 @@ export default function Match() {
   const [result, setResult] = useState(null)
   const [loading, setLoading] = useState(false)
 
-<<<<<<< HEAD
-=======
   const renderInput = (label, field, state, setState, placeholder="") => (
   <div className="flex flex-col space-y-3">
     <label className="font-semibold text-sm text-gray-200">{label}</label>
@@ -23,7 +21,6 @@ export default function Match() {
   </div>
 )
 
->>>>>>> 80c508b (brand new ui)
   const handleSubmit = async () => {
     if (!user || !crush) return alert("Please fill both profiles")
     setLoading(true)
@@ -67,21 +64,6 @@ export default function Match() {
         <h2>Compatibility Check</h2>
         <p className="feature-subtitle">compare vibes, values, and emotional bandwidth</p>
 
-<<<<<<< HEAD
-        <textarea
-          placeholder="Describe YOU (name, age, major, hobbies, values)"
-          className="feature-input"
-          value={user}
-          onChange={e => setUser(e.target.value)}
-        />
-
-        <textarea
-          placeholder="Describe CRUSH"
-          className="feature-input"
-          value={crush}
-          onChange={e => setCrush(e.target.value)}
-        />
-=======
       <div className="profile-grid">
 
         {/* YOU */}
@@ -111,7 +93,6 @@ export default function Match() {
         </div>
 
       </div>
->>>>>>> 80c508b (brand new ui)
 
         <button onClick={handleSubmit} className="feature-button match-button">
           {loading ? "Analyzing..." : "Analyze Match"}
