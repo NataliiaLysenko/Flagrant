@@ -9,8 +9,8 @@ export default function Match() {
     role: "",
     mbti: "",
     sign: "",
-    hobbies: "",
-    appearance: ""
+    interest: "",
+    description: ""
   })
 
   const [crush, setCrush] = useState({
@@ -19,8 +19,8 @@ export default function Match() {
     role: "",
     mbti: "",
     sign: "",
-    hobbies: "",
-    appearance: ""
+    interest: "",
+    description: ""
   })
 
   const [result, setResult] = useState(null)
@@ -80,7 +80,7 @@ export default function Match() {
         <h2>Compatibility Check</h2>
         <p className="feature-subtitle">compare vibes, values, and emotional bandwidth</p>
 
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="flex flex-col md:flex-row gap-6 items-stretch">
 
         {/* YOU */}
         <div className="bg-pink-100 p-4 rounded-xl space-y-3 text-black">
@@ -94,7 +94,9 @@ export default function Match() {
           {renderInput("Hobbies", "hobbies", user, setUser, "music, gym, gaming, etc")}
           {renderInput("Appearance", "appearance", user, setUser, "gorgeous / pretty / average")}
         </div>
-
+        <div className="hidden md:flex items-center justify-center text-4xl font-extrabold text-pink-500">
+          💘
+        </div>
         {/* CRUSH */}
         <div className="bg-purple-100 p-4 rounded-xl space-y-3 text-black">
           <h3 className="text-xl font-bold text-purple-600">💖 Your Crush</h3>
