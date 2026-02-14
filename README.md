@@ -6,7 +6,7 @@
 - falling in love,
 - overanalyzing a “good morning” text, or
 - one DM away from emotional damage.
-We help you do what your friends should be doing — judge your situationship objectively.
+We help you do what your friends should be doing: judge your situationship objectively.
 
 👉 **Live site**: https://flagrant.vercel.app
 
