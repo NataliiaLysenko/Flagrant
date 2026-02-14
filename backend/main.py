@@ -57,14 +57,16 @@ def match(req: MatchRequest):
         messages=[{"role":"user","content":prompt}]
     )
 
-    text = res.choices[0].message.content
+    text = res.choices[0].message.content.strip()
 
-    # Parse GPT response safely
-    import json
+    # Remove markdown formatting if present
+    if text.startswith("```"):
+        text = re.sub(r"```json|```", "", text).strip()
+
     try:
         parsed = json.loads(text)
-    except:
-        # fallback if GPT returns invalid JSON
+    except Exception as e:
+        print("JSON parse error:", e)
         parsed = {
             "compatibility": 0,
             "emotional_fit": "N/A",
@@ -73,6 +75,7 @@ def match(req: MatchRequest):
             "commentary": text,
             "verdict": "⚠️"
         }
+
 
     return parsed
 
