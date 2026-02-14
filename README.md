@@ -33,7 +33,7 @@ Upload your profile and your crush’s profile, and let the AI evaluate:
 - Lifestyle alignment
 - Chaos potential
 - Overall “should I pursue this or run” score
-- 
+  
 You’ll get:
 - A compatibility percentage
 - A breakdown of emotional + lifestyle fit
