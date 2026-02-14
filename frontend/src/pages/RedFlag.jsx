@@ -13,7 +13,7 @@ export default function RedFlag() {
     if (!messages) return alert("Paste some messages first 😤")
     setLoading(true)
     try {
-      const res = await fetch("http://localhost:8000/redflag/text", {
+      const res = await fetch("http://flagrant-production.up.railway.app/redflag/text", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages, mode })
