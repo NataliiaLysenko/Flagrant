@@ -1,140 +1,121 @@
-export default function ResultCard({
+export default function RedFlagResult({
   score = 0,
-  vibeSummary,
+  vibeSummary = "No summary available",
   redFlags = [],
   translations = [],
   nextMoves = {}
 }) {
-  // Theme logic for score
-  const getTheme = () => {
-    if (score >= 7)
-      return {
-        color: "text-red-400",
-        bg: "bg-red-500/20",
-        label: "Run for the Hills",
-        pulse: "animate-pulse",
-      };
-    if (score >= 4)
-      return {
-        color: "text-yellow-400",
-        bg: "bg-yellow-400/20",
-        label: "Proceed with Caution",
-        pulse: "",
-      };
-    return {
-      color: "text-green-400",
-      bg: "bg-green-400/20",
-      label: "Green Flags Only",
-      pulse: "",
-    };
+  // Safe defaults
+  const safeFlags = Array.isArray(redFlags) ? redFlags : [];
+  const safeTranslations = Array.isArray(translations) ? translations : [];
+  const safeNextMoves = (nextMoves && typeof nextMoves === "object") ? nextMoves : {};
+
+  // Dynamic GIF based on score
+  const getGifForScore = () => {
+    if (score === 10 || score < 0) return "/gifs/tenred.gif";
+    if (score >= 7 && score<10) return "/gifs/run-red.gif";
+    if (score >= 4 && score<10) return "/gifs/sus.gif";
+    return "/gifs/green-flags.gif";
   };
 
-  const theme = getTheme();
-  const rotation = (score / 10) * 180 - 180;
-
-  // Hardcoded Tailwind classes for Next Moves
-  const borderClasses = {
-    pivot: "border-l-4 border-blue-500",
-    slow_down: "border-l-4 border-yellow-500",
-    eject: "border-l-4 border-red-500",
-  };
-  const textClasses = {
-    pivot: "text-blue-500",
-    slow_down: "text-yellow-500",
-    eject: "text-red-500",
-  };
+  // Dynamic score color
+  let scoreColor = "text-green-600"; // default: low-risk
+  if (score >= 7) scoreColor = "text-red-600";     // high-risk → red
+  else if (score >= 4) scoreColor = "text-yellow-500"; // medium-risk → yellow
 
   return (
-    <div className="relative w-full max-w-4xl mx-auto p-8 rounded-2xl bg-gradient-to-br from-[#2a0d1a9c] via-[#ffcfda45]/20 to-[#ffffff08] shadow-xl">
+    <div className="redflag-result space-y-6">
+      {/* CARD 1 — MAIN SCORE */}
+      <div className="rf-card rf-main p-4 bg-gray-50 rounded-lg shadow-sm">
+        <div className="score-container text-center">
+          <div className={`rf-score text-4xl font-extrabold ${scoreColor}`}>{score}/10</div>
+          <p className="rf-summary text-lg mt-2">{vibeSummary}</p>
 
-      {/* --- Hero Meter --- */}
-      <div className="flex flex-col items-center mb-12 relative">
-        <div className="relative w-80 h-80 overflow-visible">
-          {/* Background semi-circle */}
-          <div className="absolute w-80 h-80 border-[16px] border-gray-800/40 rounded-full" />
-          
-          {/* Score Gauge */}
-          <div
-            className={`absolute w-80 h-80 border-[16px] border-transparent rounded-full ${theme.color} transition-transform duration-1000 ease-out`}
-            style={{ borderTopColor: "currentColor", transform: `rotate(${rotation}deg)` }}
-          />
-
-          {/* Score Number */}
-          <div className="absolute bottom-0 left-0 right-0 flex flex-col items-center">
-            <span className={`text-6xl font-black ${theme.color} ${theme.pulse}`}>
-              {score}<span className="text-2xl text-gray-300">/10</span>
-            </span>
+          {/* GIF */}
+          <div className="score-gif-box mt-4">
+            <img
+              src={getGifForScore()}
+              alt="Score reaction GIF"
+              className="score-gif-media w-full max-w-sm mx-auto rounded-md shadow-md"
+            />
           </div>
         </div>
+      </div>
 
-        {/* Vibe Summary */}
-        {vibeSummary && (
-          <p className="mt-4 text-center text-pink-100 italic text-lg max-w-xl">
-            "{vibeSummary}"
-          </p>
+      <div className="rf-card rf-flags">
+        <h4 className="result-header">🚩 Red Flag Breakdown</h4>
+        {safeFlags.length > 0 ? (
+          <div className="flags-container">
+            {safeFlags.map((flag, i) => (
+              <div key={i} className={`flag-item severity-${flag.severity || 'low'}`}>
+                <div className="flag-header">
+                  <span className="flag-category">{flag.category || "General Warning"}</span>
+                  {flag.severity && <span className="severity-badge">{flag.severity}</span>}
+                </div>
+                
+                <p className="flag-indicator">{flag.indicator}</p>
+                
+                {flag.interpretation && (
+                  <div className="flag-detail interpretation">
+                    <strong>Analysis:</strong> {flag.interpretation}
+                  </div>
+                )}
+                
+                {flag.evidence && (
+                  <div className="flag-detail evidence">
+                    <strong>Evidence:</strong> “{flag.evidence}”
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="no-flags">Green flags only. You're safe (for now). 🌿</p>
         )}
       </div>
 
-      {/* --- Two-column layout --- */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-
-        {/* --- Left Column: Red Flags --- */}
-        <div className="space-y-6 w-full">
-          <h4 className="text-xl font-bold text-pink-200 flex items-center gap-2">
-            <span className="text-2xl">🚩</span> RED FLAG BREAKDOWN
-          </h4>
-          {redFlags.length > 0 ? redFlags.map((rf, i) => (
-            <div key={i} className="bg-pink-900/30 border border-pink-600/30 p-5 rounded-2xl">
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-xs font-black uppercase bg-red-500/10 text-red-400 px-3 py-1 rounded-full border border-red-500/20">
-                  {rf.category}
-                </span>
-                <span className="text-lg">{"🚩".repeat(rf.severity)}</span>
-              </div>
-              <h5 className="font-bold text-pink-100 mb-1">{rf.indicator}</h5>
-              <p className="text-sm text-pink-200 italic mb-2">"{rf.evidence}"</p>
-              <div className="text-sm text-red-300 bg-red-900/20 p-3 rounded-lg border border-red-900/30">
-                <strong>Insight:</strong> {rf.interpretation}
-              </div>
-            </div>
-          )) : <p className="text-pink-300 italic">Analysis clear. No immediate flags.</p>}
-        </div>
-
-        {/* --- Right Column: Translations + Next Moves --- */}
-        <div className="space-y-10 w-full">
-
-          {/* --- Translations --- */}
-          <div className="space-y-6">
-            <h4 className="text-xl font-bold text-pink-200 flex items-center gap-2">
-              <span className="text-2xl">🕵️</span> READ BETWEEN THE LINES
-            </h4>
-            {translations.map((t, i) => (
-              <div key={i} className="bg-pink-900/10 border border-pink-500/20 p-5 rounded-2xl">
-                <p className="text-[10px] font-bold text-pink-400 uppercase">They Said:</p>
-                <p className="text-pink-100 italic">"{t.user_text}"</p>
-                <p className="text-[10px] font-bold text-pink-300 uppercase mt-2">AI Translation:</p>
-                <p className="text-pink-50 font-medium">{t.ai_translation}</p>
-              </div>
-            ))}
+      <div className="rf-right flex flex-col gap-6">
+          {/* CARD 3 — TRANSLATIONS */}
+          <div className="rf-card rf-translate">
+            <h4 className="result-header">🗣 Translation</h4>
+            {safeTranslations.length > 0 ? (
+              <table className="analysis-table">
+                <thead>
+                  <tr>
+                    <th>User Text</th>
+                    <th>AI Translation</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {safeTranslations.map((t, i) => (
+                    <tr key={i}>
+                      <td className="user-text-cell">“{t.user_text}”</td>
+                      <td className="ai-result-cell">{t.ai_translation}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <p className="no-data">No translations available.</p>
+            )}
           </div>
 
-          {/* --- Next Moves --- */}
-          <div className="space-y-6">
-            <h4 className="text-xl font-bold text-pink-200 flex items-center gap-2">
-              <span className="text-2xl">🎯</span> YOUR NEXT MOVE
-            </h4>
-            {Object.entries(nextMoves).map(([key, val], i) => (
-              <div key={i} className={`flex items-start gap-4 p-4 bg-pink-900/20 rounded-xl ${borderClasses[key]}`}>
-                <div className={`min-w-[80px] text-[10px] font-black uppercase pt-1 ${textClasses[key]}`}>
-                  {key.replace("_", " ").toUpperCase()}
-                </div>
-                <p className="text-sm text-pink-100">{val}</p>
+          {/* CARD 4 — NEXT MOVES */}
+          <div className="rf-card rf-next">
+            <h4 className="result-header">🧠 Next Moves</h4>
+            {Object.keys(safeNextMoves).length > 0 ? (
+              <div className="next-moves-container">
+                {Object.entries(safeNextMoves).map(([key, value]) => (
+                  <div key={key} className="next-move-item">
+                    <span className="move-label">{key.replace(/_/g, " ")}</span>
+                    <p className="move-content">{value || "No specific advice."}</p>
+                  </div>
+                ))}
               </div>
-            ))}
+            ) : (
+              <p className="no-data">Stay the course.</p>
+            )}
           </div>
-
-        </div>
-
       </div>
     </div>
   );

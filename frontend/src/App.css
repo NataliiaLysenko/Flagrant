@@ -676,6 +676,307 @@ body {
   box-shadow: 0 10px 20px #f54f6475;
 }
 
+/* =========================
+   RED FLAG RESULT LAYOUT
+   ========================= */
+
+
+.redflag-result {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Shared card style */
+.redflag-result .rf-card {
+  background: linear-gradient(145deg, #ffb3c1, #e86086);
+  border-radius: 1.25rem;
+  padding: 1.25rem;
+  color: #fff;
+  box-shadow: 0 18px 40px rgba(0,0,0,0.35);
+  border: 1px solid #ffccd5;
+}
+
+/* CARD 1 */
+/* The Main Card Layout */
+.rf-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+  background: #ffffff;
+}
+
+.rf-score {
+  font-size: 3.5rem; /* Makes the number the hero */
+  font-weight: 900;
+  color: #6c1e37;
+  line-height: 1;
+}
+
+.rf-summary {
+  font-size: 1.1rem;
+  color: #faf1f5;
+  margin: 1rem 0;
+  max-width: 600px;
+}
+
+/* THE GIF FIX */
+.score-gif-box {
+  width: 400px;         /* Fixed Width */
+  height: 350px;        /* Fixed Height */
+  margin: 1.5rem auto 0;
+  border-radius: 12px;
+  overflow: hidden;     /* Clips the GIF to the box corners */
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  border: 3px solid #faa0c9;
+}
+
+.score-gif-media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;    /* 🚨 This is the magic: it crops the GIF to fit perfectly */
+  display: block;
+}
+
+/* LOWER GRID */
+.redflag-result .rf-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+/* Custom Header Styling */
+.result-header {
+  font-size: 1.875rem; /* Equivalent to text-3xl */
+  font-weight: 700;    /* Equivalent to font-bold */
+  color: #701d36;     /* Equivalent to blue-600 */
+  margin-bottom: 0.75rem; /* Equivalent to mb-3 */
+  
+  /* You can now easily add extra flair here */
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+/* Container for the flags */
+.flags-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 1rem;
+}
+
+/* Base Flag Item Styling */
+.flag-item {
+  background: #fffafa;
+  border: 1px solid #fee2e2;
+  border-left: 6px solid #ef4444; /* The 'Red Flag' bar */
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+/* Header within the flag card */
+.flag-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.flag-category {
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  color: #991b1b;
+}
+
+/* The Severity Badge */
+.severity-badge {
+  background: #fecaca;
+  color: #991b1b;
+  font-size: 0.7rem;
+  font-weight: 900;
+  padding: 2px 8px;
+  border-radius: 20px;
+  text-transform: uppercase;
+}
+
+/* Main indicator text */
+.flag-indicator {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 10px;
+}
+
+/* Detail sections (Evidence/Interpretation) */
+.flag-detail {
+  font-size: 0.9rem;
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin-top: 8px;
+}
+
+.flag-detail strong {
+  color: #450a0a;
+}
+
+.interpretation {
+  background: #fee2e2;
+  color: #7f1d1d;
+}
+
+.evidence {
+  background: #f8fafc;
+  color: #475569;
+  font-style: italic;
+  border: 1px dashed #cbd5e1;
+}
+
+/* Zero Flags State */
+.no-flags {
+  text-align: center;
+  padding: 40px;
+  color: #caf8db;
+  font-weight: 600;
+}
+
+/* CARD 2 */
+.redflag-result .rf-flags ul {
+  margin-top: 0.75rem;
+  padding-left: 1.2rem;
+}
+
+.redflag-result .rf-flags li {
+  margin-bottom: 0.4rem;
+  color: #fbf0f3;
+}
+
+/* Container Card Tweaks */
+.rf-translate {
+  background: #e1c1d9;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* The Table Itself */
+.analysis-table {
+  width: 100%;
+  border-collapse: separate; /* Allows for rounded corners on the border */
+  border-spacing: 0;
+  margin-top: 1rem;
+  border: 1px solid #ef8faa;
+  border-radius: 8px;
+  overflow: hidden; /* Clips the inner corners to match the border-radius */
+}
+
+.analysis-table th {
+  background-color: #e67fb1;
+  color: #57212e;
+  font-weight: 600;
+  text-align: left;
+  padding: 12px 16px; /* Essential Padding */
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.analysis-table td {
+  padding: 14px 16px; /* Generous Padding */
+  border-top: 1px solid #ffd1e7;
+  vertical-align: top;
+  line-height: 1.5;
+  font-size: 1rem;
+}
+
+/* Zebra Striping */
+.analysis-table tbody tr:nth-child(even) {
+  background-color: #f4e1ee;
+}
+.analysis-table tbody tr:nth-child(odd) {
+  background-color: #f5cee9;
+}
+
+/* Specific Column Styling */
+.user-text-cell {
+  font-style: italic;
+  color: #663143;
+  width: 40%; /* Keeps the layout balanced */
+}
+
+.ai-result-cell {
+  color: #1e293b;
+  font-weight: 500;
+}
+
+/* RIGHT COLUMN */
+.redflag-result .rf-right {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Container spacing */
+.next-moves-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 1rem;
+}
+
+/* Individual Move Card */
+.next-move-item {
+  background: #f4e3eb; /* Very light green */
+  border-left: 4px solid #851745; /* Green accent bar */
+  padding: 12px 16px;
+  border-radius: 8px;
+  transition: transform 0.2s ease;
+}
+
+.next-move-item:hover {
+  transform: translateX(5px); /* Subtle interaction */
+  background: #fdb5d1;
+}
+
+/* The Key (e.g., PIVOT, EJECT) */
+.move-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #e279a1; /* Deep green */
+  margin-bottom: 4px;
+}
+
+/* The Value (The actual advice) */
+.move-content {
+  font-size: 1rem;
+  color: #1e293b;
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* Fallback text styling */
+.no-data {
+  color: #64748b;
+  font-style: italic;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .redflag-result .rf-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
 .mode-row {
   margin-top: 1rem;
   display: flex;

@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
-import ResultCard from "../components/ResultCardRedFlag"
+import RedFlagResult from "../components/ResultCardRedFlag"
 import Disclaimer from "../components/Disclaimer"
 
 export default function RedFlag() {
@@ -93,7 +93,7 @@ export default function RedFlag() {
         {/* Results */}
         {result && (
           <div className="feature-result">
-            <ResultCard
+            <RedFlagResult
               title="🚨 Analysis Result"
               score={result.score}
               vibeSummary={result.vibeSummary}
