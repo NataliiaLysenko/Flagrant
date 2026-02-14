@@ -27,10 +27,10 @@ export default function Match() {
   const [loading, setLoading] = useState(false)
 
   const renderInput = (label, field, state, setState, placeholder="") => (
-  <div className="space-y-1">
+  <div className="flex flex-col space-y-3">
     <label className="font-semibold text-sm text-gray-200">{label}</label>
     <input
-      className="w-full p-2 text-black rounded-md border"
+      className="mini-input text-black"
       placeholder={placeholder}
       value={state[field]}
       onChange={e => setState({ ...state, [field]: e.target.value })}
@@ -80,34 +80,32 @@ export default function Match() {
         <h2>Compatibility Check</h2>
         <p className="feature-subtitle">compare vibes, values, and emotional bandwidth</p>
 
-      <div className="flex flex-col md:flex-row gap-6 items-stretch">
+      <div className="profile-grid">
 
         {/* YOU */}
-        <div className="bg-pink-100 p-4 rounded-xl space-y-3 text-black">
-          <h3 className="text-xl font-bold text-pink-600">🧍 You</h3>
+        <div className="bg-pink-100 p-4 rounded-xl gap-4 text-black">
+          <h3 className="text-2xl font-extrabold !text-pink-600 drop-shadow-sm">🥰 You</h3>
 
-          {renderInput("Gender", "gender", user, setUser)}
+          {renderInput("Gender", "gender", user, setUser, "male, female, non-binary, etc")}
           {renderInput("Age", "age", user, setUser)}
           {renderInput("Occupation / Role", "role", user, setUser, "student, engineer, etc")}
           {renderInput("MBTI", "mbti", user, setUser, "INTJ, ENFP, etc")}
           {renderInput("Zodiac Sign", "sign", user, setUser)}
-          {renderInput("Hobbies", "hobbies", user, setUser, "music, gym, gaming, etc")}
-          {renderInput("Appearance", "appearance", user, setUser, "gorgeous / pretty / average")}
+          {renderInput("Interest", "interest", user, setUser, "music, gym, gaming, etc")}
+          {renderInput("Description", "description", user, setUser, "a bit about your personality, values, lifestyle, etc")}
         </div>
-        <div className="hidden md:flex items-center justify-center text-4xl font-extrabold text-pink-500">
-          💘
-        </div>
-        {/* CRUSH */}
-        <div className="bg-purple-100 p-4 rounded-xl space-y-3 text-black">
-          <h3 className="text-xl font-bold text-purple-600">💖 Your Crush</h3>
 
-          {renderInput("Gender", "gender", crush, setCrush)}
+        {/* CRUSH */}
+        <div className="bg-pink-100 p-4 rounded-xl gap-4 text-black">
+          <h3 className="text-2xl font-extrabold !text-pink-600 drop-shadow-sm">💖 Your Crush</h3>
+
+          {renderInput("Gender", "gender", crush, setCrush, "male, female, non-binary, etc")}
           {renderInput("Age", "age", crush, setCrush)}
-          {renderInput("Occupation / Role", "role", crush, setCrush)}
-          {renderInput("MBTI", "mbti", crush, setCrush)}
+          {renderInput("Occupation / Role", "role", crush, setCrush, "student, engineer, etc")}
+          {renderInput("MBTI", "mbti", crush, setCrush, "INTJ, ENFP, etc")}
           {renderInput("Zodiac Sign", "sign", crush, setCrush)}
-          {renderInput("Hobbies", "hobbies", crush, setCrush)}
-          {renderInput("Appearance", "appearance", crush, setCrush)}
+          {renderInput("Interest", "interest", crush, setCrush, "music, gym, gaming, etc")}
+          {renderInput("Description", "description", crush, setCrush,"paste from their bio 👀")}
         </div>
 
       </div>
