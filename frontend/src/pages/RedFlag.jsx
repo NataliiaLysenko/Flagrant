@@ -2,10 +2,10 @@ import { useState } from "react"
 import ResultCard from "../components/ResultCardRedFlag"
 import Disclaimer from "../components/Disclaimer"
 
-
 export default function RedFlag() {
   const [messages, setMessages] = useState("")
-  const [result, setResult] = useState("")
+  const [mode, setMode] = useState("honest")
+  const [result, setResult] = useState(null)
   const [loading, setLoading] = useState(false)
 
   const analyze = async () => {

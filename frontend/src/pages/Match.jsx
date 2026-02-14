@@ -1,57 +1,137 @@
 import { useState } from "react"
-import ResultCard from "../components/ResultCardRedFlag"
+import ResultCard from "../components/ResultCard"
 import Disclaimer from "../components/Disclaimer"
 
-
 export default function Match() {
-  const [user, setUser] = useState({})
-  const [crush, setCrush] = useState({})
-  const [result, setResult] = useState("")
+  const [user, setUser] = useState({
+    gender: "",
+    age: "",
+    role: "",
+    mbti: "",
+    sign: "",
+    hobbies: "",
+    appearance: ""
+  })
+
+  const [crush, setCrush] = useState({
+    gender: "",
+    age: "",
+    role: "",
+    mbti: "",
+    sign: "",
+    hobbies: "",
+    appearance: ""
+  })
+
+  const [result, setResult] = useState(null)
   const [loading, setLoading] = useState(false)
 
+  const renderInput = (label, field, state, setState, placeholder="") => (
+  <div className="space-y-1">
+    <label className="font-semibold text-sm text-gray-200">{label}</label>
+    <input
+      className="w-full p-2 text-black rounded-md border"
+      placeholder={placeholder}
+      value={state[field]}
+      onChange={e => setState({ ...state, [field]: e.target.value })}
+    />
+  </div>
+)
+
   const handleSubmit = async () => {
+    if (!user.gender || !crush.gender) return alert("Fill both profiles 😤")
     setLoading(true)
-    const res = await fetch("http://localhost:8000/match", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user, crush })
-    })
-    const data = await res.json()
-    setResult(data.result)
+    try {
+      const res = await fetch("http://localhost:8000/match", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user: { profile: user },
+          crush: { profile: crush }
+        })
+      })
+      const data = await res.json()
+
+      setResult({
+        compatibility: data?.compatibility ?? 0,
+        emotional_fit: data?.emotional_fit ?? "N/A",
+        lifestyle_fit: data?.lifestyle_fit ?? "N/A",
+        chaos_risk: data?.chaos_risk ?? "N/A",
+        commentary: data?.commentary ?? "",
+        verdict: data?.verdict ?? "warning"
+      })
+    } catch (err) {
+      console.error(err)
+      setResult({
+        compatibility: 0,
+        emotional_fit: "N/A",
+        lifestyle_fit: "N/A",
+        chaos_risk: "N/A",
+        commentary: "Error analyzing match",
+        verdict: "warning"
+      })
+    }
     setLoading(false)
   }
 
   return (
-    <div className="p-8 max-w-4xl mx-auto space-y-4">
-      <h2 className="text-2xl font-bold">💘 Compatibility Check</h2>
+    <section className="feature-page match-page">
+      <div className="feature-panel">
+        <h2>Compatibility Check</h2>
+        <p className="feature-subtitle">compare vibes, values, and emotional bandwidth</p>
 
-      <textarea
-        placeholder="Describe YOU (name, age, major, hobbies, values)"
-        className="w-full p-3 text-black"
-        onChange={e => setUser({ profile: e.target.value })}
-      />
+      <div className="grid md:grid-cols-2 gap-6">
 
-      <textarea
-        placeholder="Describe CRUSH"
-        className="w-full p-3 text-black"
-        onChange={e => setCrush({ profile: e.target.value })}
-      />
+        {/* YOU */}
+        <div className="bg-pink-100 p-4 rounded-xl space-y-3 text-black">
+          <h3 className="text-xl font-bold text-pink-600">🧍 You</h3>
 
-      <button
-        onClick={handleSubmit}
-        className="px-6 py-3 bg-pink-600 rounded-xl"
-      >
-        {loading ? "Analyzing..." : "Analyze Match"}
-      </button>
+          {renderInput("Gender", "gender", user, setUser)}
+          {renderInput("Age", "age", user, setUser)}
+          {renderInput("Occupation / Role", "role", user, setUser, "student, engineer, etc")}
+          {renderInput("MBTI", "mbti", user, setUser, "INTJ, ENFP, etc")}
+          {renderInput("Zodiac Sign", "sign", user, setUser)}
+          {renderInput("Hobbies", "hobbies", user, setUser, "music, gym, gaming, etc")}
+          {renderInput("Appearance", "appearance", user, setUser, "gorgeous / pretty / average")}
+        </div>
 
-      {result && (
-        <>
-            <pre className="bg-black p-4 rounded-xl whitespace-pre-wrap">
-            {result}
-            </pre>
+        {/* CRUSH */}
+        <div className="bg-purple-100 p-4 rounded-xl space-y-3 text-black">
+          <h3 className="text-xl font-bold text-purple-600">💖 Your Crush</h3>
+
+          {renderInput("Gender", "gender", crush, setCrush)}
+          {renderInput("Age", "age", crush, setCrush)}
+          {renderInput("Occupation / Role", "role", crush, setCrush)}
+          {renderInput("MBTI", "mbti", crush, setCrush)}
+          {renderInput("Zodiac Sign", "sign", crush, setCrush)}
+          {renderInput("Hobbies", "hobbies", crush, setCrush)}
+          {renderInput("Appearance", "appearance", crush, setCrush)}
+        </div>
+
+      </div>
+
+        <button onClick={handleSubmit} className="feature-button match-button">
+          {loading ? "Analyzing..." : "Analyze Match"}
+        </button>
+
+        {result && (
+          <div className="feature-result">
+            <ResultCard
+              title="Match Result"
+              score={result.compatibility}
+              flags={[]}
+              analysis={[
+                { flag: "Emotional Fit", detail: result.emotional_fit },
+                { flag: "Lifestyle Fit", detail: result.lifestyle_fit },
+                { flag: "Chaos Risk", detail: result.chaos_risk },
+                { flag: "Funny Commentary", detail: result.commentary },
+              ]}
+              advice={result.verdict}
+            />
             <Disclaimer />
-        </>
+          </div>
         )}
-    </div>
+      </div>
+    </section>
   )
 }

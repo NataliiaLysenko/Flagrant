@@ -2,17 +2,29 @@ import { Link } from "react-router-dom"
 
 export default function Home() {
   return (
-    <div className="flex flex-col items-center justify-center h-[80vh] gap-6">
-      <h1 className="text-4xl font-bold">💗 Flagrant 💗</h1>
-      <p className="text-gray-400">Avoid emotional damage 101</p>
+    <section className="home-page">
+      <div className="spark spark-a" />
+      <div className="spark spark-b" />
+      <div className="spark spark-c" />
+      <div className="ring ring-a" />
+      <div className="ring ring-b" />
+      <div className="ring ring-c" />
 
-      <Link to="/match" className="px-6 py-3 bg-pink-500 rounded-xl">
-        💘 Match Me
-      </Link>
+      <div className="app-panel">
+        <p className="tagline">match signals, catch red flags</p>
+        <div className="hero-card">
+          <span className="moon" />
+          <h1>Flagrant</h1>
+          <p>match your vibes and expose suspicious texting behavior</p>
+        </div>
 
-      <Link to="/redflag" className="px-6 py-3 bg-red-500 rounded-xl">
-        🚩 Detect Red Flags
-      </Link>
-    </div>
+        <div className="home-actions">
+          <Link to="/match" className="cta-link">match me</Link>
+          <Link to="/redflag" className="cta-link cta-link-alert">detect red flags</Link>
+        </div>
+
+        <p className="hint">the lab for pairing people and auditing their chat drama</p>
+      </div>
+    </section>
   )
 }
