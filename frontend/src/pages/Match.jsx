@@ -30,7 +30,7 @@ export default function Match() {
   <div className="flex flex-col space-y-3">
     <label className="font-semibold text-sm text-gray-200">{label}</label>
     <input
-      className="mini-input text-black"
+      className="mini-input"
       placeholder={placeholder}
       value={state[field]}
       onChange={e => setState({ ...state, [field]: e.target.value })}
