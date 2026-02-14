@@ -79,14 +79,14 @@ export default function Match() {
     <section className="feature-page match-page">
       <div className="feature-panel">
         <Link to="/" className="feature-back-link">Back to Home</Link>
-        <h2>Compatibility Check</h2>
+        <h2>👓 Compatibility Check</h2>
         <p className="feature-subtitle">compare vibes, values, and emotional bandwidth</p>
 
       <div className="profile-grid">
 
         {/* YOU */}
-        <div className="bg-pink-100 p-4 rounded-xl gap-4 text-black">
-          <h3 className="text-2xl font-extrabold !text-pink-600 drop-shadow-sm">🥰 You</h3>
+        <div className="bg-pink-100 p-4 rounded-xl gap-4">
+          <h3>🥰 You</h3>
 
           {renderInput("Gender", "gender", user, setUser, "male, female, non-binary, etc")}
           {renderInput("Age", "age", user, setUser)}
@@ -98,8 +98,8 @@ export default function Match() {
         </div>
 
         {/* CRUSH */}
-        <div className="bg-pink-100 p-4 rounded-xl gap-4 text-black">
-          <h3 className="text-2xl font-extrabold !text-pink-600 drop-shadow-sm">💖 Your Crush</h3>
+        <div className="bg-pink-100 p-4 rounded-xl gap-4">
+          <h3>💖 Your Crush</h3>
 
           {renderInput("Gender", "gender", crush, setCrush, "male, female, non-binary, etc")}
           {renderInput("Age", "age", crush, setCrush)}
@@ -116,6 +116,15 @@ export default function Match() {
           {loading ? "Analyzing..." : "Analyze Match"}
         </button>
 
+        {loading && (
+        <div className="flex flex-col items-center gap-3 mt-4">
+          <div className="w-6 h-6 border-2 border-pink-300 border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-sm text-gray-300 animate-pulse">
+            Matching wavelengths... almost there ✨
+          </p>
+        </div>
+        )}
+      
         {result && (
           <div className="feature-result">
             <ResultCard
