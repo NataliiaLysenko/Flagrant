@@ -10,3 +10,4 @@ npm -v
 ```bash
 npm run dev
 ```
+uvicorn main:app --reload
