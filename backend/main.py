@@ -77,182 +77,77 @@ def match(req: MatchRequest):
     return parsed
 
 
+# 1. Keep only ONE definition of the Request Model
 class RedFlagRequest(BaseModel):
     messages: str
     mode: str
 
-@app.post("/redflag/text")
-def redflag(req: RedFlagRequest):
-    # Style prompt
-    if req.mode == "delulu":
-        style_prompt = """
-        You are an overly dramatic, delusional, hopeless romantic AI.
-        You believe in destiny, soulmates, and emotional chaos.
-        You exaggerate emotions, add humor, and dramatic flair.
-        """
-    else:
-        style_prompt = """
-        You are a brutally honest, emotionally intelligent AI.
-        You give harsh truths, no sugar-coating, no emotional cushioning.
-        You are direct, blunt, and savage but correct.
-        """
-
-    # Prompt for structured JSON
-    prompt = f"""
-    {style_prompt}
-    Analyze the following conversation:
-
-    {req.messages}
-
-    Detect:
-    - Gaslighting
-    - Manipulation
-    - Guilt-tripping
-    - Love bombing
-    - Controlling behavior
-    - Narcissistic traits
-    - Passive aggression
-    - Sexual Pressure
-    - Ghosting potential
-    - Abusive tendencies
-
-    RETURN YOUR RESPONSE AS STRICT JSON:
-    {{
-      "score": 0-10,
-      "flags": [
-        {{ "name": "<flag name>", "detail": "<short description>" }}
-      ],
-      "analysis": [
-        {{ "flag": "<flag name>", "detail": "<short text explanation>" }}
-      ],
-      "advice": "<advice text>"
-    }}
-    Only return JSON. No extra text.
-    """
-
-    res = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[{"role": "user", "content": prompt}]
-    )
-
-    # GPT response text
-    text = res.choices[0].message.content
-
-    # Try to parse JSON safely
+# 2. Improved Extraction Helper
+def extract_json(text: str) -> dict:
     try:
-        parsed = json.loads(text)
-    except:
-        # fallback if GPT returns bad format
-        parsed = {
-            "score": 0,
-            "flags": [],
-            "analysis": [],
-            "advice": text
-        }
-
-class RedFlagRequest(BaseModel):
-    messages: str
-    mode: str
+        # Remove potential markdown code blocks
+        clean_text = re.sub(r"```json|```", "", text).strip()
+        # Find the first { and last }
+        start_idx = clean_text.find('{')
+        end_idx = clean_text.rfind('}')
+        if start_idx != -1 and end_idx != -1:
+            return json.loads(clean_text[start_idx:end_idx+1])
+    except Exception as e:
+        print(f"Parsing error: {e}")
+    return None
 
 @app.post("/redflag/text")
 def redflag(req: RedFlagRequest):
-    # Style prompt
     if req.mode == "delulu":
         style_prompt = """
         You are a dating behavior analyst AI.
         You infer personality traits, attachment styles, and manipulation patterns from text.
-        You do NOT summarize.
-        You DO interpret subtext, tone, power dynamics, and emotional tactics.
-        You must cite evidence from the provided messages.
-        If no red flags are present, explain WHY and what healthy traits are shown.
-        In delulu mode, you dramatize but NEVER remove analytical depth.
-        Humor is layered ON TOP of correct psychological interpretation.
-        Be sacarstic and funny
+        You dramatize emotions, exaggerate humor, but never remove analytical depth.
+        Sound simple, informal, gen-z friendly.
+        Be sarcastic and extremely funny.
         """
     else:
         style_prompt = """
-        You are a dating behavior analyst AI.
+        You are a brutally honest dating behavior analyst AI.
         You infer personality traits, attachment styles, and manipulation patterns from text.
-        You do NOT summarize.
-        You DO interpret subtext, tone, power dynamics, and emotional tactics.
-        You must cite evidence from the provided messages.
-        If no red flags are present, explain WHY and what healthy traits are shown.
-        Be sacarstic and funny
-
+        Sound simple, informal, gen-z friendly.
+        You are direct, blunt, and insightful.
         """
-
-    # Prompt for structured JSON
     prompt = f"""
     {style_prompt}
-    Analyze the following conversation:
-
-    {req.messages}
-
-    Detect:
-    - Gaslighting
-    - Manipulation
-    - Guilt-tripping
-    - Love bombing
-    - Controlling behavior
-    - Narcissistic traits
-    - Passive aggression
-    - Sexual Pressure
-    - Ghosting potential
-    - Abusive tendencies
-
+    Analyze this conversation: "{req.messages}"
+    
     RETURN STRICT JSON ONLY:
     {{
-        "score": 0-10,
-        "vibe_summary": "<1–2 sentence emotional read>",
-        "red_flags": [
-            {{
-            "category": "<Boundaries | Tone | Consistency | Control | Sexual Pressure | etc>",
-            "indicator": "<what they did>",
-            "severity": 1-3,
-            "evidence": "<exact quote or paraphrase from the text>",
-            "interpretation": "<what this suggests about them>"
-            }}
-        ],
-        "translations": [
-            {{
-            "user_text": "<original line>",
-            "ai_translation": "<what this REALLY means>"
-            }}
-        ],
-        "next_moves": {{
-            "pivot": "<message to test them>",
-            "slow_down": "<boundary-setting message>",
-            "eject": "<safe exit message>"
-        }}
+        "score": 0,
+        "vibe_summary": "string",
+        "red_flags": [{{ "category": "string", "indicator": "string", "severity": 1, "evidence": "string", "interpretation": "string" }}],
+        "translations": [{{ "user_text": "string", "ai_translation": "string" }}],
+        "next_moves": {{ "pivot": "string", "slow_down": "string", "eject": "string" }}
     }}
-    Only return JSON. No extra text.
     """
 
-    res = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[{"role": "user", "content": prompt}]
-    )
-
-    # GPT response text
-    import re
-
-    def extract_json(text):
-        match = re.search(r"\{[\s\S]*\}", text)
-        if match:
-            return match.group(0)
-        return None
-
-    raw = res.choices[0].message.content
-    json_text = extract_json(raw)
-
     try:
-        parsed = json.loads(json_text)
-    except:
-        parsed = {
-            "score": 0,
-            "flags": [],
-            "analysis": [],
-            "advice": raw
-        }
+        res = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role": "user", "content": prompt}],
+            response_format={ "type": "json_object" } # <--- FORCES GPT TO SEND JSON
+        )
+        raw = res.choices[0].message.content
+        parsed = json.loads(raw)
+    except Exception as e:
+        print(f"OpenAI or Parsing Error: {e}")
+        parsed = {}
 
-    return parsed
+    # Ensure the frontend always gets the keys it expects
+    return {
+        "score": parsed.get("score", 0),
+        "vibe_summary": parsed.get("vibe_summary", "Could not analyze this vibe."),
+        "red_flags": parsed.get("red_flags", []),
+        "translations": parsed.get("translations", []),
+        "next_moves": parsed.get("next_moves", {
+            "pivot": "Try asking a direct question.",
+            "slow_down": "Take a break from replying.",
+            "eject": "Ghosting is an option."
+        })
+    }
