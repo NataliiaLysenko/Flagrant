@@ -143,7 +143,17 @@ def redflag(req: RedFlagRequest):
     prompt = f"""
     {style_prompt}
     Analyze this conversation: "{req.messages}"
-    
+    IMPORTANT: "score" is a RED FLAG SEVERITY SCORE.
+    - 0 = extremely green / emotionally safe / healthy
+    - 10 = extremely red flag / emotionally unsafe / high risk
+    Choose an integer from 0 to 10.
+
+    Scoring anchors:
+    0-1: respectful, consistent, no pressure, healthy boundaries
+    2-3: mild awkwardness, minor insecurity, but still respectful
+    4-6: noticeable issues (guilt-trips, mild control, repeated boundary pushing)
+    7-8: strong red flags (gaslighting, manipulation, coercion attempts, isolation)
+    9-10: extreme risk (threats, stalking vibe, repeated coercion, abusive patterns)
     RETURN STRICT JSON ONLY:
     {{
         "score": 0,
@@ -152,6 +162,11 @@ def redflag(req: RedFlagRequest):
         "translations": [{{ "user_text": "string", "ai_translation": "string" }}],
         "next_moves": {{ "pivot": "string", "slow_down": "string", "eject": "string" }}
     }}
+    Rules:
+    - score MUST follow the scale above (0 green → 10 red).
+    - severity inside each red_flag is 1-5 (5 = worst) and should align with the overall score.
+    - Put exact short quotes from the chat into "evidence".
+    - Return ONLY valid JSON. No markdown. No extra text.
     """
 
     try:
