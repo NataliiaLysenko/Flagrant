@@ -66,16 +66,27 @@ export default function RedFlag() {
         <div className="mode-row">
           <p className="mode-label">Tone:</p>
           <div className="mode-toggle-group">
-            {["honest", "delulu"].map(m => (
-              <button
-                key={m}
-                type="button"
-                onClick={() => setMode(m)}
-                className={`mode-toggle ${mode === m ? "is-active" : ""}`}
-              >
-                {m === "honest" ? "Brutally Honest" : "Delulu Mode"}
-              </button>
-            ))}
+            <button
+              type="button"
+              onClick={() => setMode("honest")}
+              className={`mode-toggle ${mode === "honest" ? "is-active" : ""}`}
+            >
+              Brutally Honest
+            </button>
+            <button
+              type="button"
+              onClick={() => setMode("delulu")}
+              className={`mode-toggle ${mode === "delulu" ? "is-active" : ""}`}
+            >
+              Delulu Mode
+            </button>
+            <button
+              type="button"
+              onClick={() => setMode("big_sis")}
+              className={`mode-toggle ${mode === "big_sis" ? "is-active" : ""}`}
+            >
+              Big Sis
+            </button>
           </div>
         </div>
 
