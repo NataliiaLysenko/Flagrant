@@ -21,7 +21,6 @@ export default function Match() {
         })
       })
       const data = await res.json()
-      console.log("Match backend returned:", data)
 
       setResult({
         compatibility: data?.compatibility ?? 0,
@@ -29,7 +28,7 @@ export default function Match() {
         lifestyle_fit: data?.lifestyle_fit ?? "N/A",
         chaos_risk: data?.chaos_risk ?? "N/A",
         commentary: data?.commentary ?? "",
-        verdict: data?.verdict ?? "⚠️"
+        verdict: data?.verdict ?? "warning"
       })
     } catch (err) {
       console.error(err)
@@ -39,54 +38,54 @@ export default function Match() {
         lifestyle_fit: "N/A",
         chaos_risk: "N/A",
         commentary: "Error analyzing match",
-        verdict: "⚠️"
+        verdict: "warning"
       })
     }
     setLoading(false)
   }
 
   return (
-    <div className="p-8 max-w-4xl mx-auto space-y-6">
-      <h2 className="text-3xl font-bold text-pink-600">💘 Compatibility Check</h2>
+    <section className="feature-page match-page">
+      <div className="feature-panel">
+        <h2>Compatibility Check</h2>
+        <p className="feature-subtitle">compare vibes, values, and emotional bandwidth</p>
 
-      <textarea
-        placeholder="Describe YOU (name, age, major, hobbies, values)"
-        className="w-full h-32 p-3 text-black rounded-md border border-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500"
-        value={user}
-        onChange={e => setUser(e.target.value)}
-      />
+        <textarea
+          placeholder="Describe YOU (name, age, major, hobbies, values)"
+          className="feature-input"
+          value={user}
+          onChange={e => setUser(e.target.value)}
+        />
 
-      <textarea
-        placeholder="Describe CRUSH"
-        className="w-full h-32 p-3 text-black rounded-md border border-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500"
-        value={crush}
-        onChange={e => setCrush(e.target.value)}
-      />
+        <textarea
+          placeholder="Describe CRUSH"
+          className="feature-input"
+          value={crush}
+          onChange={e => setCrush(e.target.value)}
+        />
 
-      <button
-        onClick={handleSubmit}
-        className="px-6 py-3 bg-pink-600 hover:bg-pink-700 rounded-xl font-semibold transition-colors"
-      >
-        {loading ? "Analyzing..." : "Analyze Match"}
-      </button>
+        <button onClick={handleSubmit} className="feature-button match-button">
+          {loading ? "Analyzing..." : "Analyze Match"}
+        </button>
 
-      {result && (
-        <div className="mt-6">
-          <ResultCard
-            title="💘 Match Result"
-            score={result.compatibility}
-            flags={[]} // not used for match
-            analysis={[
-              { flag: "Emotional Fit", detail: result.emotional_fit },
-              { flag: "Lifestyle Fit", detail: result.lifestyle_fit },
-              { flag: "Chaos Risk", detail: result.chaos_risk },
-              { flag: "Funny Commentary", detail: result.commentary },
-            ]}
-            advice={result.verdict}
-          />
-          <Disclaimer />
-        </div>
-      )}
-    </div>
+        {result && (
+          <div className="feature-result">
+            <ResultCard
+              title="Match Result"
+              score={result.compatibility}
+              flags={[]}
+              analysis={[
+                { flag: "Emotional Fit", detail: result.emotional_fit },
+                { flag: "Lifestyle Fit", detail: result.lifestyle_fit },
+                { flag: "Chaos Risk", detail: result.chaos_risk },
+                { flag: "Funny Commentary", detail: result.commentary },
+              ]}
+              advice={result.verdict}
+            />
+            <Disclaimer />
+          </div>
+        )}
+      </div>
+    </section>
   )
 }
