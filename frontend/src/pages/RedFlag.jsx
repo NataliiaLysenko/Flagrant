@@ -1,8 +1,5 @@
 import { useState } from "react"
-<<<<<<< Updated upstream
-=======
 import ResultCard from "../components/ResultCardRedFlag"
->>>>>>> Stashed changes
 import Disclaimer from "../components/Disclaimer"
 
 
@@ -13,15 +10,6 @@ export default function RedFlag() {
 
   const analyze = async () => {
     setLoading(true)
-<<<<<<< Updated upstream
-    const res = await fetch("http://localhost:8000/redflag/text", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ messages })
-    })
-    const data = await res.json()
-    setResult(data.analysis)
-=======
     try {
       const res = await fetch("http://localhost:8000/redflag/text", {
         method: "POST",
@@ -48,7 +36,6 @@ export default function RedFlag() {
         advice: "Error analyzing the messages"
       })
     }
->>>>>>> Stashed changes
     setLoading(false)
   }
 
@@ -70,15 +57,6 @@ export default function RedFlag() {
       </button>
 
       {result && (
-<<<<<<< Updated upstream
-        <>
-            <pre className="bg-black p-4 rounded-xl whitespace-pre-wrap">
-            {result}
-            </pre>
-            <Disclaimer />
-        </>
-        )}
-=======
         <div className="mt-6">
           <ResultCard
             title="🚩 Red Flag Analysis"
@@ -91,7 +69,6 @@ export default function RedFlag() {
           <Disclaimer />
         </div>
       )}
->>>>>>> Stashed changes
     </div>
   )
 }

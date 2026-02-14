@@ -1,8 +1,5 @@
 import { useState } from "react"
-<<<<<<< Updated upstream
-=======
 import ResultCard from "../components/ResultCardRedFlag"
->>>>>>> Stashed changes
 import Disclaimer from "../components/Disclaimer"
 
 

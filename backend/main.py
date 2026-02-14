@@ -38,8 +38,6 @@ def test_ai():
 )
 
 
-<<<<<<< Updated upstream
-=======
 class RedFlagRequest(BaseModel):
     messages: str
     mode: str
@@ -146,4 +144,3 @@ def redflag(req: RedFlagRequest):
         }
 
     return parsed
->>>>>>> Stashed changes
