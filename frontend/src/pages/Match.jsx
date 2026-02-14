@@ -43,7 +43,7 @@ export default function Match() {
     if (!user || !crush) return alert("Please fill both profiles")
     setLoading(true)
     try {
-      const res = await fetch("http://flagrant-production.up.railway.app", {
+      const res = await fetch("https://flagrant-production.up.railway.app/match", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
