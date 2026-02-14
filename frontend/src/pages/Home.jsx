@@ -39,10 +39,10 @@ export default function Home() {
       <div className="footer-marquee" aria-label="entertainment disclaimer">
         <div className="marquee-track">
           <span>
-            This app was built purely for entertainment purposes. Please take all results with a pinch - or maybe two - of salt. Happy Saint Valentine&apos;s Day.
+            This website was built purely for entertainment purposes. Please take all results with a pinch - or maybe two - of salt. Happy Saint Valentine&apos;s Day &#x1F495;
           </span>
           <span aria-hidden="true">
-            This app was built purely for entertainment purposes. Please take all results with a pinch - or maybe two - of salt. Happy Saint Valentine&apos;s Day.
+            This website was built purely for entertainment purposes. Please take all results with a pinch - or maybe two - of salt. Happy Saint Valentine&apos;s Day &#x1F495;
           </span>
         </div>
       </div>

@@ -282,6 +282,26 @@ body {
   color: inherit;
 }
 
+.feature-back-link {
+  display: inline-block;
+  align-self: flex-start;
+  margin-bottom: 0.9rem;
+  border: 1px solid #ffd1e2a3;
+  border-radius: 999px;
+  padding: 0.45rem 0.9rem;
+  color: #ffe9f3;
+  text-decoration: none;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: linear-gradient(145deg, #ffffff24, #ffffff0a);
+}
+
+.feature-back-link:hover {
+  border-color: #ffdcee;
+  background: linear-gradient(145deg, #ffffff33, #ffffff14);
+}
+
 .feature-subtitle {
   margin-top: 0.4rem;
   color: #ffe2f0;
@@ -313,15 +333,24 @@ body {
   border-radius: 12px;
   padding: 0.7rem 1.1rem;
   color: #fff;
+  font-family: inherit;
   font-weight: 700;
   letter-spacing: 0.04em;
   cursor: pointer;
 }
 
 .match-page {
-
+  .match-page {
+  padding: 3rem 1.5rem;
   max-width: 1200px;
-  flex: 1;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  font-family: 'Inter', sans-serif;
+  color: #fff;
+  background: linear-gradient(135deg, #69325f 0%, #571750 100%);
+}
 }
 
 .match-page::before,
@@ -653,6 +682,60 @@ body {
   align-items: center;
   gap: 0.9rem;
   flex-wrap: wrap;
+}
+
+.mode-label {
+  margin: 0;
+  color: #ffe3ee;
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  font-family: inherit;
+}
+
+.mode-toggle-group {
+  display: flex;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.mode-toggle {
+  border: 1px solid #ffb7ca7a;
+  background: #ffffff10;
+  color: #ffe3ee;
+  border-radius: 12px;
+  padding: 0.55rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mode-toggle:hover {
+  background: #ffffff20;
+  border-color: #ffd7e8b0;
+}
+
+.mode-toggle.is-active {
+  border-color: #ffb7ca;
+  color: #fff;
+  box-shadow: 0 8px 16px #f54f6457;
+}
+
+.redflag-page .mode-toggle {
+  background: linear-gradient(140deg, #ffffff20, #ffffff0d);
+  border-color: #ffb5c980;
+  color: #ffe8ef;
+}
+
+.redflag-page .mode-toggle:hover {
+  background: linear-gradient(140deg, #ffffff2e, #ffffff16);
+}
+
+.redflag-page .mode-toggle.is-active {
+  background: linear-gradient(90deg, #f45668, #d12f46);
 }
 
 .mode-option {

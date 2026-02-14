@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { Link } from "react-router-dom"
 import ResultCard from "../components/ResultCard"
 import Disclaimer from "../components/Disclaimer"
 
@@ -77,6 +78,7 @@ export default function Match() {
   return (
     <section className="feature-page match-page">
       <div className="feature-panel">
+        <Link to="/" className="feature-back-link">Back to Home</Link>
         <h2>Compatibility Check</h2>
         <p className="feature-subtitle">compare vibes, values, and emotional bandwidth</p>
 
