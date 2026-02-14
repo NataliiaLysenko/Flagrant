@@ -15,7 +15,7 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://flagrant.vercel.app/"],
+    allow_origins=["https://flagrant.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
