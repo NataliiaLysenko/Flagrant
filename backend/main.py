@@ -1,20 +1,18 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from pydantic import BaseModel
 from openai import OpenAI
 import os
 from dotenv import load_dotenv
 import sys
-from pydantic import BaseModel
+import json
+import re
 
 sys.stdout.reconfigure(encoding='utf-8')
-
 load_dotenv()
-
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 app = FastAPI()
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -33,22 +31,25 @@ class MatchRequest(BaseModel):
 
 @app.post("/match")
 def match(req: MatchRequest):
+    # Prompt GPT to return STRICT JSON
     prompt = f"""
-        You are a quirky, sarcastic but insightful AI dating expert.
+    You are a quirky, sarcastic but insightful AI dating expert.
 
-        Analyze compatibility between:
+    Analyze compatibility between:
 
-        Person A: {req.user}
+    Person A: {req.user}
+    Person B: {req.crush}
 
-        Person B: {req.crush}
-
-        Give:
-        1. Compatibility score (0–10)
-        2. Emotional fit
-        3. Lifestyle fit
-        4. Chaos risk
-        5. Dating advice for Person A (what can the first date be like)
-        6. Final verdict (💚⚠️🚩)
+    RETURN STRICT JSON ONLY:
+    {{
+      "compatibility": 0-10,
+      "emotional_fit": "<short description>",
+      "lifestyle_fit": "<short description>",
+      "chaos_risk": "<short description>",
+      "commentary": "<funny commentary>",
+      "verdict": "💚 / ⚠️ / 🚩"
+    }}
+    Only return JSON, no extra text.
     """
 
     res = client.chat.completions.create(
@@ -56,58 +57,97 @@ def match(req: MatchRequest):
         messages=[{"role":"user","content":prompt}]
     )
 
-    return {"result": res.choices[0].message.content}
+    text = res.choices[0].message.content
+
+    # Parse GPT response safely
+    import json
+    try:
+        parsed = json.loads(text)
+    except:
+        # fallback if GPT returns invalid JSON
+        parsed = {
+            "compatibility": 0,
+            "emotional_fit": "N/A",
+            "lifestyle_fit": "N/A",
+            "chaos_risk": "N/A",
+            "commentary": text,
+            "verdict": "⚠️"
+        }
+
+    return parsed
+
 
 class RedFlagRequest(BaseModel):
     messages: str
-    mode: str 
+    mode: str
 
 @app.post("/redflag/text")
 def redflag(req: RedFlagRequest):
-
+    # Style prompt
     if req.mode == "delulu":
-            style_prompt = """
-    You are an overly dramatic, delusional, hopeless romantic AI.
-    You believe in destiny, soulmates, and emotional chaos.
-    You exaggerate emotions, add humor, and dramatic flair.
-    """
+        style_prompt = """
+        You are an overly dramatic, delusional, hopeless romantic AI.
+        You believe in destiny, soulmates, and emotional chaos.
+        You exaggerate emotions, add humor, and dramatic flair.
+        """
     else:
-            style_prompt = """
-    You are a brutally honest, emotionally intelligent AI.
-    You give harsh truths, no sugar-coating, no emotional cushioning.
-    You are direct, blunt, and savage but correct.
-    """
+        style_prompt = """
+        You are a brutally honest, emotionally intelligent AI.
+        You give harsh truths, no sugar-coating, no emotional cushioning.
+        You are direct, blunt, and savage but correct.
+        """
 
+    # Prompt for structured JSON
     prompt = f"""
-        {style_prompt}
-        Analyze the following conversation:
+    {style_prompt}
+    Analyze the following conversation:
 
-        {req.messages}
+    {req.messages}
 
-        Detect:
-        - Gaslighting
-        - Manipulation
-        - Guilt-tripping
-        - Love bombing
-        - Controlling behavior
-        - Narcissistic traits
-        - Passive aggression
-        - Sexual Pressure
-        - Ghosting potential
-        - Abusive tendencies
+    Detect:
+    - Gaslighting
+    - Manipulation
+    - Guilt-tripping
+    - Love bombing
+    - Controlling behavior
+    - Narcissistic traits
+    - Passive aggression
+    - Sexual Pressure
+    - Ghosting potential
+    - Abusive tendencies
 
-        Return:
-        1. Red flag severity score (0–10)
-        2. Detected red flags
-        3. Short analysis on the message (key points with text evidence)
-        4. Advice on whether user should continue seeing this person
-     """
+    RETURN YOUR RESPONSE AS STRICT JSON:
+    {{
+      "score": 0-10,
+      "flags": [
+        {{ "name": "<flag name>", "detail": "<short description>" }}
+      ],
+      "analysis": [
+        {{ "flag": "<flag name>", "detail": "<short text explanation>" }}
+      ],
+      "advice": "<advice text>"
+    }}
+    Only return JSON. No extra text.
+    """
 
     res = client.chat.completions.create(
         model="gpt-4o-mini",
-        messages=[{"role":"user","content":prompt}]
+        messages=[{"role": "user", "content": prompt}]
     )
 
-    return {"analysis": res.choices[0].message.content}
+    # GPT response text
+    text = res.choices[0].message.content
 
+    # Try to parse JSON safely
+    try:
+        parsed = json.loads(text)
+    except:
+        # fallback if GPT returns bad format
+        parsed = {
+            "score": 0,
+            "flags": [],
+            "analysis": [],
+            "advice": text
+        }
 
+    return parsed
