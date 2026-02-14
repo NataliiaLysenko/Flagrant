@@ -1,4 +1,8 @@
 import { useState } from "react"
+<<<<<<< Updated upstream
+=======
+import ResultCard from "../components/ResultCardRedFlag"
+>>>>>>> Stashed changes
 import Disclaimer from "../components/Disclaimer"
 
 
@@ -9,6 +13,7 @@ export default function RedFlag() {
 
   const analyze = async () => {
     setLoading(true)
+<<<<<<< Updated upstream
     const res = await fetch("http://localhost:8000/redflag/text", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -16,6 +21,34 @@ export default function RedFlag() {
     })
     const data = await res.json()
     setResult(data.analysis)
+=======
+    try {
+      const res = await fetch("http://localhost:8000/redflag/text", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages, mode })
+      })
+      const data = await res.json()
+      console.log("Backend returned:", data)
+
+      // Ensure safe defaults
+      setResult({
+        score: data?.score ?? 0,
+        vibeSummary: data?.vibe_summary ?? "",
+        redFlags: Array.isArray(data?.red_flags) ? data.red_flags : [],
+        translations: Array.isArray(data?.translations) ? data.translations : [],
+        nextMoves: data?.next_moves ?? null
+      })
+    } catch (err) {
+      console.error(err)
+      setResult({
+        score: 0,
+        flags: [],
+        analysis: [],
+        advice: "Error analyzing the messages"
+      })
+    }
+>>>>>>> Stashed changes
     setLoading(false)
   }
 
@@ -37,6 +70,7 @@ export default function RedFlag() {
       </button>
 
       {result && (
+<<<<<<< Updated upstream
         <>
             <pre className="bg-black p-4 rounded-xl whitespace-pre-wrap">
             {result}
@@ -44,6 +78,20 @@ export default function RedFlag() {
             <Disclaimer />
         </>
         )}
+=======
+        <div className="mt-6">
+          <ResultCard
+            title="🚩 Red Flag Analysis"
+            score={result.score}
+            vibeSummary={result.vibeSummary}
+            redFlags={result.redFlags}
+            translations={result.translations}
+            nextMoves={result.nextMoves}
+          />
+          <Disclaimer />
+        </div>
+      )}
+>>>>>>> Stashed changes
     </div>
   )
 }

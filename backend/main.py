@@ -38,3 +38,112 @@ def test_ai():
 )
 
 
+<<<<<<< Updated upstream
+=======
+class RedFlagRequest(BaseModel):
+    messages: str
+    mode: str
+
+@app.post("/redflag/text")
+def redflag(req: RedFlagRequest):
+    # Style prompt
+    if req.mode == "delulu":
+        style_prompt = """
+        You are a dating behavior analyst AI.
+        You infer personality traits, attachment styles, and manipulation patterns from text.
+        You do NOT summarize.
+        You DO interpret subtext, tone, power dynamics, and emotional tactics.
+        You must cite evidence from the provided messages.
+        If no red flags are present, explain WHY and what healthy traits are shown.
+        In delulu mode, you dramatize but NEVER remove analytical depth.
+        Humor is layered ON TOP of correct psychological interpretation.
+        Be sacarstic and funny
+        """
+    else:
+        style_prompt = """
+        You are a dating behavior analyst AI.
+        You infer personality traits, attachment styles, and manipulation patterns from text.
+        You do NOT summarize.
+        You DO interpret subtext, tone, power dynamics, and emotional tactics.
+        You must cite evidence from the provided messages.
+        If no red flags are present, explain WHY and what healthy traits are shown.
+        Be sacarstic and funny
+
+        """
+
+    # Prompt for structured JSON
+    prompt = f"""
+    {style_prompt}
+    Analyze the following conversation:
+
+    {req.messages}
+
+    Detect:
+    - Gaslighting
+    - Manipulation
+    - Guilt-tripping
+    - Love bombing
+    - Controlling behavior
+    - Narcissistic traits
+    - Passive aggression
+    - Sexual Pressure
+    - Ghosting potential
+    - Abusive tendencies
+
+    RETURN STRICT JSON ONLY:
+    {{
+        "score": 0-10,
+        "vibe_summary": "<1–2 sentence emotional read>",
+        "red_flags": [
+            {{
+            "category": "<Boundaries | Tone | Consistency | Control | Sexual Pressure | etc>",
+            "indicator": "<what they did>",
+            "severity": 1-3,
+            "evidence": "<exact quote or paraphrase from the text>",
+            "interpretation": "<what this suggests about them>"
+            }}
+        ],
+        "translations": [
+            {{
+            "user_text": "<original line>",
+            "ai_translation": "<what this REALLY means>"
+            }}
+        ],
+        "next_moves": {{
+            "pivot": "<message to test them>",
+            "slow_down": "<boundary-setting message>",
+            "eject": "<safe exit message>"
+        }}
+    }}
+    Only return JSON. No extra text.
+    """
+
+    res = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": prompt}]
+    )
+
+    # GPT response text
+    import re
+
+    def extract_json(text):
+        match = re.search(r"\{[\s\S]*\}", text)
+        if match:
+            return match.group(0)
+        return None
+
+    raw = res.choices[0].message.content
+    json_text = extract_json(raw)
+
+    try:
+        parsed = json.loads(json_text)
+    except:
+        parsed = {
+            "score": 0,
+            "flags": [],
+            "analysis": [],
+            "advice": raw
+        }
+
+    return parsed
+>>>>>>> Stashed changes
