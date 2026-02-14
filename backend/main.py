@@ -33,12 +33,14 @@ class MatchRequest(BaseModel):
 def match(req: MatchRequest):
     # Prompt GPT to return STRICT JSON
     prompt = f"""
-    You are a quirky, sarcastic but insightful AI dating expert.
+    You are a quirky, sarcastic but insightful and poignant AI dating expert.
 
     Analyze compatibility between:
 
     Person A: {req.user}
     Person B: {req.crush}
+
+    Be flexible - same gender can used with different dynamics.
 
     RETURN STRICT JSON ONLY:
     {{
