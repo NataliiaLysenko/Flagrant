@@ -3,13 +3,43 @@ import ResultCard from "../components/ResultCard"
 import Disclaimer from "../components/Disclaimer"
 
 export default function Match() {
-  const [user, setUser] = useState("")
-  const [crush, setCrush] = useState("")
+  const [user, setUser] = useState({
+    gender: "",
+    age: "",
+    role: "",
+    mbti: "",
+    sign: "",
+    hobbies: "",
+    appearance: ""
+  })
+
+  const [crush, setCrush] = useState({
+    gender: "",
+    age: "",
+    role: "",
+    mbti: "",
+    sign: "",
+    hobbies: "",
+    appearance: ""
+  })
+
   const [result, setResult] = useState(null)
   const [loading, setLoading] = useState(false)
 
+  const renderInput = (label, field, state, setState, placeholder="") => (
+  <div className="space-y-1">
+    <label className="font-semibold text-sm text-gray-200">{label}</label>
+    <input
+      className="w-full p-2 text-black rounded-md border"
+      placeholder={placeholder}
+      value={state[field]}
+      onChange={e => setState({ ...state, [field]: e.target.value })}
+    />
+  </div>
+)
+
   const handleSubmit = async () => {
-    if (!user || !crush) return alert("Please fill both profiles")
+    if (!user.gender || !crush.gender) return alert("Fill both profiles 😤")
     setLoading(true)
     try {
       const res = await fetch("http://localhost:8000/match", {
@@ -50,19 +80,35 @@ export default function Match() {
         <h2>Compatibility Check</h2>
         <p className="feature-subtitle">compare vibes, values, and emotional bandwidth</p>
 
-        <textarea
-          placeholder="Describe YOU (name, age, major, hobbies, values)"
-          className="feature-input"
-          value={user}
-          onChange={e => setUser(e.target.value)}
-        />
+      <div className="grid md:grid-cols-2 gap-6">
 
-        <textarea
-          placeholder="Describe CRUSH"
-          className="feature-input"
-          value={crush}
-          onChange={e => setCrush(e.target.value)}
-        />
+        {/* YOU */}
+        <div className="bg-pink-100 p-4 rounded-xl space-y-3 text-black">
+          <h3 className="text-xl font-bold text-pink-600">🧍 You</h3>
+
+          {renderInput("Gender", "gender", user, setUser)}
+          {renderInput("Age", "age", user, setUser)}
+          {renderInput("Occupation / Role", "role", user, setUser, "student, engineer, etc")}
+          {renderInput("MBTI", "mbti", user, setUser, "INTJ, ENFP, etc")}
+          {renderInput("Zodiac Sign", "sign", user, setUser)}
+          {renderInput("Hobbies", "hobbies", user, setUser, "music, gym, gaming, etc")}
+          {renderInput("Appearance", "appearance", user, setUser, "gorgeous / pretty / average")}
+        </div>
+
+        {/* CRUSH */}
+        <div className="bg-purple-100 p-4 rounded-xl space-y-3 text-black">
+          <h3 className="text-xl font-bold text-purple-600">💖 Your Crush</h3>
+
+          {renderInput("Gender", "gender", crush, setCrush)}
+          {renderInput("Age", "age", crush, setCrush)}
+          {renderInput("Occupation / Role", "role", crush, setCrush)}
+          {renderInput("MBTI", "mbti", crush, setCrush)}
+          {renderInput("Zodiac Sign", "sign", crush, setCrush)}
+          {renderInput("Hobbies", "hobbies", crush, setCrush)}
+          {renderInput("Appearance", "appearance", crush, setCrush)}
+        </div>
+
+      </div>
 
         <button onClick={handleSubmit} className="feature-button match-button">
           {loading ? "Analyzing..." : "Analyze Match"}
