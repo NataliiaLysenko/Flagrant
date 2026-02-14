@@ -3,10 +3,40 @@ import ResultCard from "../components/ResultCard"
 import Disclaimer from "../components/Disclaimer"
 
 export default function Match() {
-  const [user, setUser] = useState("")
-  const [crush, setCrush] = useState("")
+  const [user, setUser] = useState({
+    gender: "",
+    age: "",
+    role: "",
+    mbti: "",
+    sign: "",
+    interest: "",
+    description: ""
+  })
+
+  const [crush, setCrush] = useState({
+    gender: "",
+    age: "",
+    role: "",
+    mbti: "",
+    sign: "",
+    interest: "",
+    description: ""
+  })
+
   const [result, setResult] = useState(null)
   const [loading, setLoading] = useState(false)
+
+  const renderInput = (label, field, state, setState, placeholder="") => (
+  <div className="flex flex-col space-y-3">
+    <label className="font-semibold text-sm text-gray-200">{label}</label>
+    <input
+      className="mini-input text-black"
+      placeholder={placeholder}
+      value={state[field]}
+      onChange={e => setState({ ...state, [field]: e.target.value })}
+    />
+  </div>
+)
 
   const handleSubmit = async () => {
     if (!user || !crush) return alert("Please fill both profiles")
@@ -50,19 +80,35 @@ export default function Match() {
         <h2>Compatibility Check</h2>
         <p className="feature-subtitle">compare vibes, values, and emotional bandwidth</p>
 
-        <textarea
-          placeholder="Describe YOU (name, age, major, hobbies, values)"
-          className="feature-input"
-          value={user}
-          onChange={e => setUser(e.target.value)}
-        />
+      <div className="profile-grid">
 
-        <textarea
-          placeholder="Describe CRUSH"
-          className="feature-input"
-          value={crush}
-          onChange={e => setCrush(e.target.value)}
-        />
+        {/* YOU */}
+        <div className="bg-pink-100 p-4 rounded-xl gap-4 text-black">
+          <h3 className="text-2xl font-extrabold !text-pink-600 drop-shadow-sm">🥰 You</h3>
+
+          {renderInput("Gender", "gender", user, setUser, "male, female, non-binary, etc")}
+          {renderInput("Age", "age", user, setUser)}
+          {renderInput("Occupation / Role", "role", user, setUser, "student, engineer, etc")}
+          {renderInput("MBTI", "mbti", user, setUser, "INTJ, ENFP, etc")}
+          {renderInput("Zodiac Sign", "sign", user, setUser)}
+          {renderInput("Interest", "interest", user, setUser, "music, gym, gaming, etc")}
+          {renderInput("Description", "description", user, setUser, "a bit about your personality, values, lifestyle, etc")}
+        </div>
+
+        {/* CRUSH */}
+        <div className="bg-pink-100 p-4 rounded-xl gap-4 text-black">
+          <h3 className="text-2xl font-extrabold !text-pink-600 drop-shadow-sm">💖 Your Crush</h3>
+
+          {renderInput("Gender", "gender", crush, setCrush, "male, female, non-binary, etc")}
+          {renderInput("Age", "age", crush, setCrush)}
+          {renderInput("Occupation / Role", "role", crush, setCrush, "student, engineer, etc")}
+          {renderInput("MBTI", "mbti", crush, setCrush, "INTJ, ENFP, etc")}
+          {renderInput("Zodiac Sign", "sign", crush, setCrush)}
+          {renderInput("Interest", "interest", crush, setCrush, "music, gym, gaming, etc")}
+          {renderInput("Description", "description", crush, setCrush,"paste from their bio 👀")}
+        </div>
+
+      </div>
 
         <button onClick={handleSubmit} className="feature-button match-button">
           {loading ? "Analyzing..." : "Analyze Match"}
