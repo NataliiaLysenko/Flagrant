@@ -1,7 +1,20 @@
-export default function App() {
+import { Routes, Route } from "react-router-dom"
+import Home from "./pages/Home"
+import Match from "./pages/Match"
+import RedFlag from "./pages/RedFlag"
+import Navbar from "./components/Navbar"
+
+function App() {
   return (
-    <h1 className="text-5xl font-bold text-pink-500">
-      Tailwind Is Working 🔥
-    </h1>
+    <div className="min-h-screen bg-gray-900 text-white">
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/match" element={<Match />} />
+        <Route path="/redflag" element={<RedFlag />} />
+      </Routes>
+    </div>
   )
 }
+
+export default App
