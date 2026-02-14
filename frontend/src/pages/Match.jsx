@@ -91,7 +91,18 @@ export default function Match() {
           {renderInput("Gender", "gender", user, setUser, "male, female, non-binary, etc")}
           {renderInput("Age", "age", user, setUser)}
           {renderInput("Occupation / Role", "role", user, setUser, "student, engineer, etc")}
+          <div>
           {renderInput("MBTI", "mbti", user, setUser, "INTJ, ENFP, etc")}
+          <a
+            href="https://www.16personalities.com/free-personality-test"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mbti-link"
+          >
+            Don’t know your MBTI? Take the free test →
+          </a>
+          </div>
+
           {renderInput("Zodiac Sign", "sign", user, setUser)}
           {renderInput("Interest", "interest", user, setUser, "music, gym, gaming, etc")}
           {renderInput("Description", "description", user, setUser, "a bit about your personality, values, lifestyle, etc")}
