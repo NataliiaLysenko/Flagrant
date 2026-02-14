@@ -759,7 +759,7 @@ body {
   height: 350px;        /* Fixed Height */
   margin: 1.5rem auto 0;
   border-radius: 12px;
-  overflow: hidden;     /* Clips the GIF to the box corners */
+  overflow: hidden;    
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
   border: 3px solid #faa0c9;
 }
@@ -767,7 +767,7 @@ body {
 .score-gif-media {
   width: 100%;
   height: 100%;
-  object-fit: cover;    /* 🚨 This is the magic: it crops the GIF to fit perfectly */
+  object-fit: cover;    
   display: block;
 }
 
@@ -1311,5 +1311,45 @@ body {
     right: 0.7rem;
     width: auto;
     bottom: 4.8rem;
+  }
+}
+@media (max-width: 768px) {
+  .match-page .profile-grid {
+    flex-direction: column;
+  }
+
+  .match-page .feature-panel {
+    padding: 1.25rem;
+  }
+
+  .match-page h2 {
+    font-size: 2.2rem;
+    text-align: center;
+  }
+
+  .match-page .profile-grid > div {
+    padding: 1.25rem;
+  }
+
+  .match-page .feature-button.match-button {
+    width: 100%;
+  }
+}
+@media (max-width: 768px) {
+  .score-gif-box {
+    width: 90%;
+    height: auto;
+    max-width: 320px;
+  }
+
+  .score-gif-media {
+    height: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .score-gif-box {
+    width: 95%;
+    max-width: 280px;
   }
 }
