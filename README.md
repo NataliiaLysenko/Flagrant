@@ -73,9 +73,11 @@ Flagrant exists to:
 **Frontend**
 - React
 - Vite
+
 **Backend**
 - Python
 - FastAPI
+
 **AI**
 - Large Language Models doing what your friends are too biased to do
 
